@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Activación de Cuenta</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f6f8;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" style="padding:40px 0;">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;padding:40px;">
+          
+          <tr>
+            <td align="center" style="padding-bottom:30px;">
+              <h2 style="margin:0;color:#111;">Borderlink</h2>
+              <p style="margin:5px 0 0;color:#666;">Nueva solicitud de registro</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <h3 style="color:#333;">Información del solicitante</h3>
+
+              <p><strong>Nombre:</strong> {{ full_name }}</p>
+              <p><strong>Email:</strong> {{ email }}</p>
+              <p><strong>Empresa:</strong> {{ company }}</p>
+              <p><strong>Teléfono:</strong> {{ phone }}</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="padding:30px 0;">
+              <a href="{{ activation_link }}" 
+                 style="background:#2563eb;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:6px;display:inline-block;font-weight:bold;">
+                Activar cuenta
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="font-size:12px;color:#888;text-align:center;padding-top:20px;">
+              Este enlace expira automáticamente.<br>
+              Borderlink © {{ year }}
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

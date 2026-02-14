@@ -1,0 +1,53 @@
+services:
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: ${WEB_DOCKERFILE}
+    container_name: healthms_web_${APP_ENV}
+    ports:
+      - "${WEB_PORT}:${WEB_PORT}"
+    env_file:
+      - ./apps/web/.env
+    command: ${WEB_COMMAND}
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: ${API_DOCKERFILE}
+    container_name: healthms_api_${APP_ENV}
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    env_file:
+      - ./apps/api/.env
+    command: ${API_COMMAND}
+    volumes:
+      - ./apps/api:/app
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo:latest
+    container_name: healthms_mongo_${APP_ENV}
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  redis:
+    image: redis:latest
+    container_name: healthms_redis_${APP_ENV}
+    volumes:
+      - redis_data:/data
+      
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+  redis_data:

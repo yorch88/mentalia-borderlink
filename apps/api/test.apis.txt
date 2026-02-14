@@ -1,0 +1,156 @@
+🚀 4️⃣ Flujo correcto para probar onboarding
+
+    `Este es el orden exacto:
+
+    🥇 Paso 1 – Registrar usuario
+
+    Endpoint:
+
+    POST /v1/onboarding/register
+
+
+    Ejemplo body:
+
+    {
+    "email": "admin@test.com",
+    "password": "test#12345678",
+    "giro": "psychology",
+    "org_name": "Consultorio MentalIA",
+    "modules": ["MetalIA MS"],
+    "captcha_token": "dev"
+    }
+
+
+    Debe devolver:
+
+    {
+    "client_code": "48213",
+    "db_name": "8213_X9ZT",
+    "status": "pending",
+    "approval_token": "eyJhbGciOi..."
+    }
+
+
+    Si no devuelve approval_token → revisa que estés en development.
+
+    🥈 Paso 2 – Aprobar usuario
+
+    Copias el approval_token.
+
+    Ejecutas:
+
+    POST /v1/onboarding/approve
+
+    {
+    "token": "eyJhbGciOi..."
+    }
+
+
+    Debe devolver:
+
+    {
+    "status": "active",
+    "tenant_db": "8213_X9ZT"
+    }
+
+
+    Aquí es cuando se crea la base tenant.
+
+    Puedes verificar dentro del contenedor Mongo:
+
+    docker exec -it tailhawk_mongo mongosh
+
+
+    Y luego:
+
+    show dbs
+
+
+    Debe aparecer:
+
+    borderlink_global
+    8213_X9ZT
+
+    🥉 Paso 3 – Login
+    POST /v1/auth/login
+
+    {
+    "email": "admin@test.com",
+    "password": "12345678"
+    }
+
+
+    Debe devolver:
+
+    {
+    "access_token": "eyJhbGciOi...",
+    "token_type": "bearer"
+    }
+
+    🏅 Paso 4 – Probar endpoint protegido
+
+    Click en Authorize en Swagger
+
+    Pega el access_token
+
+    Ejecuta:
+
+    GET /v1/app/me
+
+
+    Debe devolver el usuario del tenant.
+
+    🧠 Orden mental correcto
+
+    Siempre:
+
+    register
+    → approve
+    → login
+    → endpoint protegido
+`
+PUT
+/v1/landing/
+Modify Landing
+
+Parameters
+Cancel
+Reset
+No parameters
+
+Request body
+
+application/json
+{
+  "heroTitle": "Impulsa tu negocio al siguiente nivel",
+  "heroSubtitle": "Soluciones digitales diseñadas para crecer contigo",
+  "aboutTitle": "Sobre Nosotros",
+  "aboutDescription": "Somos expertos en desarrollo digital.",
+  "features": [
+    {
+      "title": "Desarrollo web a medida",
+      "description": "Creamos soluciones personalizadas según tus necesidades."
+    },
+    {
+      "title": "Optimización SEO",
+      "description": "Mejoramos tu posicionamiento en buscadores."
+    },
+    {
+      "title": "Integración con APIs",
+      "description": "Conectamos tu sistema con servicios externos."
+    },
+    {
+      "title": "Soporte técnico continuo",
+      "description": "Te acompañamos en todo momento."
+    }
+  ],
+  "contactTitle": "Contáctanos",
+  "contactSubtitle": "Estamos listos para ayudarte",
+  "privacyText": "Protegemos tus datos.",
+  "footerText": "© 2026 TuEmpresa",
+  "socialLinks": {
+    "linkedin": "https://linkedin.com/company/tuempresa",
+    "facebook": "https://facebook.com/tuempresa"
+  }
+}
+

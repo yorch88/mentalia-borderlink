@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
+<body style="margin:0;padding:0;background-color:#f4f6f8;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" style="padding:40px 0;">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;padding:40px;">
+
+          <tr>
+            <td align="center" style="padding-bottom:30px;">
+              <h2 style="margin:0;color:#1e3a8a;">BorderLink</h2>
+              <p style="margin:5px 0 0;color:#555;">Nueva organización registrada</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:20px 0;">
+              <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">
+                <tr style="background:#f1f5f9;">
+                  <td><strong>Email Admin</strong></td>
+                  <td>{{ email }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Nombre Organización</strong></td>
+                  <td>{{ org_name }}</td>
+                </tr>
+                <tr style="background:#f1f5f9;">
+                  <td><strong>Giro</strong></td>
+                  <td>{{ giro }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Módulos</strong></td>
+                  <td>{{ modules }}</td>
+                </tr>
+                <tr style="background:#f1f5f9;">
+                  <td><strong>Tenant Token</strong></td>
+                  <td style="word-break:break-all;">{{ token }}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="padding-top:30px;font-size:12px;color:#888;">
+              BorderLink © {{ year }}
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
