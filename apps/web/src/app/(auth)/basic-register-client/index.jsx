@@ -103,7 +103,11 @@ const Index = () => {
       );
 
     } catch (err) {
-      setError(err?.message || "Error inesperado");
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Error inesperado");
+      }
     } finally {
       setLoading(false);
     }
