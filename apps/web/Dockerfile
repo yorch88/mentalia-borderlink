@@ -1,27 +1,35 @@
 # ===============================
 # Stage 1: Build
 # ===============================
-FROM node:20 AS builder
+FROM node:20-alpine AS builder
 
-WORKDIR /app/node_modules
+# Carpeta real de trabajo
+WORKDIR /app
 
+# Copiamos solo package files primero (mejor cache)
 COPY package*.json ./
-RUN npm install
 
+# Instalación limpia y determinística
+RUN npm ci
+
+# Copiamos el resto del proyecto
 COPY . .
+
+# Build
 RUN npm run build
 
 
 # ===============================
 # Stage 2: Static server
 # ===============================
-FROM node:20
+FROM node:20-alpine
 
-WORKDIR /app/node_modules
+WORKDIR /app
 
 # Servidor estático ligero
 RUN npm install -g serve
 
+# Solo copiamos el build final
 COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
