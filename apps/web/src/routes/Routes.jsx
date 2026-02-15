@@ -70,6 +70,7 @@ const Starter = lazy(() => import('@/app/(admin)/(pages)/starter'));
 const Timeline = lazy(() => import('@/app/(admin)/(pages)/timeline'));
 
 //auth
+const BasicApproveClient = lazy(() => import('@/app/(auth)/basic-approve-client'));
 const BasicRegisterClient = lazy(() => import('@/app/(auth)/basic-register-client'));
 const BasicCreatePassword = lazy(() => import('@/app/(auth)/basic-create-password'));
 const BasicLogin = lazy(() => import('@/app/(auth)/basic-login'));
@@ -170,7 +171,14 @@ export const layoutsRoutes = [{
   path: '/create-leave-employee',
   name: 'CreateLeaveEmployee',
   element: <CreateLeaveEmployee />
-},{
+},
+
+{
+  path: '/basic-approve-client',
+  name: 'BasicApproveClient',
+  element: <BasicApproveClient />
+}, 
+{
   path: '/basic-register-client',
   name: 'BasicRegisterClient',
   element: <BasicRegisterClient />
