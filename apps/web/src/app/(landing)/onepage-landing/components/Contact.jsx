@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { sendContact } from "../api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Contact = ({ data }) => {
   const [form, setForm] = useState({
@@ -30,11 +31,10 @@ const Contact = ({ data }) => {
   // GET Challenge
   // ---------------------------
   const getChallenge = async () => {
-    const res = await fetch("http://127.0.0.1:8000/v1/security/challenge");
+    const res = await fetch(`${API_URL}/v1/security/challenge`);
     if (!res.ok) throw new Error("No se pudo obtener challenge");
     return res.json();
   };
-
   // ---------------------------
   // SHA-256 POW Solver
   // ---------------------------
