@@ -17,7 +17,12 @@ const Index = () => {
 
     try {
       const data = await approveTenant(apiKey);
-      setMessage(data.message);
+      setMessage(
+        data?.message ||
+        (data?.status === "active"
+          ? `Organización activada. DB: ${data.tenant_db}`
+          : "Proceso completado")
+      );
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
