@@ -36,10 +36,10 @@ const Hero = ({ data }) => {
           </div>
 
           {/* Imagen */}
-          {(borderLogo|| url_image) && (
+          {(url_image || borderLogo) && (
             <div className="flex justify-center items-center">
               <img
-                src={borderLogo || url_image}
+                src={url_image || borderLogo}
                 alt={title || "Hero image"}
                 className="w-full max-w-md object-contain drop-shadow-lg"
               />
