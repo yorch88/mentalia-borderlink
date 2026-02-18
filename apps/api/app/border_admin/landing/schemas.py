@@ -40,6 +40,7 @@ class LandingContent(BaseModel):
 class ContactIn(BaseModel):
     name: str
     email: str
+    country_code: Optional[str] = None
     phone: Optional[str] = None
     message: str
     pow: PowIn

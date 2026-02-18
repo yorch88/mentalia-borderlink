@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { sendContact } from "../api";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Contact = ({ data }) => {
@@ -35,6 +38,7 @@ const Contact = ({ data }) => {
     if (!res.ok) throw new Error("No se pudo obtener challenge");
     return res.json();
   };
+
   // ---------------------------
   // SHA-256 POW Solver
   // ---------------------------
@@ -79,20 +83,16 @@ const Contact = ({ data }) => {
     setLoading(true);
 
     try {
-      // 1️⃣ Obtener challenge
       const challenge = await getChallenge();
-
-      // 2️⃣ Resolver POW
       const counter = await solvePow(
         challenge.nonce,
         challenge.difficulty
       );
 
-      // 3️⃣ Enviar formulario con pow
       await sendContact({
         name: form.name,
         email: form.email,
-        phone: form.phone,
+        phone: `+${form.phone}`, // formato internacional E.164
         message: form.message,
         pow: {
           nonce: challenge.nonce,
@@ -162,13 +162,21 @@ const Contact = ({ data }) => {
                 className="form-input w-full"
               />
 
-              <input
-                name="phone"
+              {/* 📞 Phone Input PRO */}
+              <div className="md:col-span-2">
+              <PhoneInput
+                country={"mx"}
                 value={form.phone}
-                onChange={onChange}
-                placeholder="Tu numero telefonico"
-                className="form-input w-full md:col-span-2"
+                onChange={(phone) =>
+                  setForm((prev) => ({ ...prev, phone }))
+                }
+                enableSearch
+                containerClass="!w-full"
+                inputClass="!w-full !h-[42px] !pl-14 !bg-white !text-gray-900 !border !border-gray-300 !rounded-md"
+                buttonClass="!h-[42px] !bg-white !border !border-gray-300 !rounded-l-md !flex !items-center !justify-center"
+                dropdownClass="!bg-white !text-black"
               />
+            </div>
 
               <textarea
                 name="message"
