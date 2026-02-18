@@ -129,11 +129,11 @@ const Contact = ({ data }) => {
         <div className="grid lg:grid-cols-2 gap-10 items-start">
           <div>
             <h2 className="mb-4 capitalize text-blue-50 leading-normal text-4xl font-semibold">
-              {data?.contactTitle || "Contáctanos"}
+              {data?.contact?.title || "Contáctanos"}
             </h2>
 
             <p className="text-lg text-blue-200">
-              {data?.contactSubtitle ||
+              {data?.contact?.subtitle ||
                 "Cuéntanos lo que necesitas y te responderemos con los siguientes pasos."}
             </p>
           </div>
@@ -188,7 +188,7 @@ const Contact = ({ data }) => {
                   className="mt-1"
                 />
                 <p className="text-sm text-blue-100">
-                  {data?.privacyText ||
+                  {data?.privacy?.text ||
                     "Acepto que mis datos serán utilizados únicamente para contacto y no serán compartidos con terceros."}
                 </p>
               </div>

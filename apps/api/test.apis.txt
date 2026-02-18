@@ -122,35 +122,57 @@ Request body
 
 application/json
 {
-  "heroTitle": "Impulsa tu negocio al siguiente nivel",
-  "heroSubtitle": "Soluciones digitales diseñadas para crecer contigo",
-  "aboutTitle": "Sobre Nosotros",
-  "aboutDescription": "Somos expertos en desarrollo digital.",
+  "hero": {
+    "title": "Impulsa tu negocio al siguiente nivel",
+    "subtitle": "Soluciones digitales diseñadas para crecer contigo",
+    "url_image": "https://images.unsplash.com/photo-1518779578993-ec3579fee39f"
+  },
+  "about": {
+    "title": "Sobre Nosotros",
+    "description": "Somos expertos en desarrollo digital y transformación tecnológica.",
+    "url_image": "https://images.unsplash.com/photo-1556761175-b413da4baf72"
+  },
   "features": [
     {
       "title": "Desarrollo web a medida",
-      "description": "Creamos soluciones personalizadas según tus necesidades."
+      "description": "Creamos soluciones personalizadas según tus necesidades.",
+      "url_image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085"
     },
     {
       "title": "Optimización SEO",
-      "description": "Mejoramos tu posicionamiento en buscadores."
+      "description": "Mejoramos tu posicionamiento en buscadores.",
+      "url_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f"
     },
     {
       "title": "Integración con APIs",
-      "description": "Conectamos tu sistema con servicios externos."
+      "description": "Conectamos tu sistema con servicios externos.",
+      "url_image": "https://images.unsplash.com/photo-1504639725590-34d0984388bd"
     },
     {
       "title": "Soporte técnico continuo",
-      "description": "Te acompañamos en todo momento."
+      "description": "Te acompañamos en todo momento.",
+      "url_image": "https://images.unsplash.com/photo-1531482615713-2afd69097998"
     }
   ],
-  "contactTitle": "Contáctanos",
-  "contactSubtitle": "Estamos listos para ayudarte",
-  "privacyText": "Protegemos tus datos.",
-  "footerText": "© 2026 TuEmpresa",
+  "contact": {
+    "title": "Contáctanos",
+    "subtitle": "Estamos listos para ayudarte",
+    "url_image": "https://images.unsplash.com/photo-1553877522-43269d4ea984"
+  },
+  "privacy": {
+    "text": "Protegemos tus datos y solo los usamos para contactarte.",
+    "url_image": "https://images.unsplash.com/photo-1563986768609-322da13575f3"
+  },
+    "footer": {
+    "text": "© 2026 Borderlink",
+    "url_image": "...",
+    "socialLinks": {
+        "linkedin": "...",
+        "facebook": "..."
+    }
+    },
   "socialLinks": {
     "linkedin": "https://linkedin.com/company/tuempresa",
     "facebook": "https://facebook.com/tuempresa"
   }
 }
-

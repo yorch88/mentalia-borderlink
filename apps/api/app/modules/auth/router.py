@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends
 from app.security.dependencies import security
 from app.security.jwt import decode_token
 from app.security.token_blacklist import blacklist_token
-from app.security.dependencies import get_current_user
+from app.security.dependencies import get_current_tenat_user
 from app.core.config import settings
 
 router = APIRouter(prefix="/v1/auth", tags=["auth"])
@@ -20,7 +20,7 @@ async def login(body: LoginIn):
         raise HTTPException(status_code=401, detail="Credenciales inválidas o cuenta inactiva")
 
 @router.get("/me")
-async def me(current_user = Depends(get_current_user)):
+async def me(current_user = Depends(get_current_tenat_user)):
     return {
         "authenticated": True,
         "email": current_user["email"],

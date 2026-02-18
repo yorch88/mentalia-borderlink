@@ -1,7 +1,7 @@
-import borderlogo from '@/assets/images/landing/borderlogo.png';
-
 const About = ({ data }) => {
-  if (!data) return null;
+  if (!data?.about) return null;
+
+  const { title, description, url_image } = data.about;
 
   return (
     <section id="about" className="relative lg:py-24 md:py-16 py-12">
@@ -10,28 +10,34 @@ const About = ({ data }) => {
 
           {/* Texto */}
           <div>
-            <h2 className="mb-6 text-4xl font-semibold text-default-800">
-              {data.aboutTitle}
-            </h2>
+            {title && (
+              <h2 className="mb-6 text-4xl font-semibold text-default-800">
+                {title}
+              </h2>
+            )}
 
-            <p className="text-lg text-default-500 leading-relaxed">
-              {data.aboutDescription}
-            </p>
+            {description && (
+              <p className="text-lg text-default-500 leading-relaxed">
+                {description}
+              </p>
+            )}
           </div>
 
-          {/* Imagen (solo una, no 6) */}
-          <div>
-            <img
-              src={borderlogo}
-              alt="About visual"
-              className="rounded-xl shadow-lg"
-            />
-          </div>
+          {/* Imagen dinámica */}
+          {url_image && (
+            <div>
+              <img
+                src={url_image}
+                alt={title || "About image"}
+                className="rounded-xl shadow-lg"
+              />
+            </div>
+          )}
 
         </div>
       </div>
     </section>
   );
-}; 
+};
 
 export default About;

@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     APP_PORT: int = 8000
     DEBUG: bool = True
     APP_ROOT_PATH: str = ""
+    BOOTSTRAP_ADMIN_EMAIL: str | None = None
+    BOOTSTRAP_ADMIN_PASSWORD: str | None = None
+    
     # ==============================
     # SECURITY
     # ==============================

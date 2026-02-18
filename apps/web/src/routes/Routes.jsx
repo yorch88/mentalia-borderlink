@@ -174,17 +174,6 @@ export const layoutsRoutes = [{
 },
 
 {
-  path: '/basic-approve-client',
-  name: 'BasicApproveClient',
-  element: <BasicApproveClient />
-}, 
-{
-  path: '/basic-register-client',
-  name: 'BasicRegisterClient',
-  element: <BasicRegisterClient />
-}, 
-
-{
   path: '/create-payslip',
   name: 'CreatePayslip',
   element: <CreatePayslip />
@@ -341,7 +330,19 @@ export const singlePageRoutes = [{
   path: '/basic-register',
   name: 'BasicRegister',
   element: <BasicRegister />
-}, {
+}, 
+{
+  path: '/basic-approve-client',
+  name: 'BasicApproveClient',
+  element: <BasicApproveClient />
+}, 
+{
+  path: '/basic-register-client',
+  name: 'BasicRegisterClient',
+  element: <BasicRegisterClient />
+}, 
+
+{
   path: '/basic-create-password',
   name: 'BasicCreatePassword',
   element: <BasicCreatePassword />
