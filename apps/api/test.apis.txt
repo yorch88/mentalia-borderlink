@@ -125,7 +125,7 @@ application/json
   "hero": {
     "title": "Impulsa tu negocio al siguiente nivel",
     "subtitle": "Soluciones digitales diseñadas para crecer contigo",
-    "url_image": "https://images.unsplash.com/photo-1518779578993-ec3579fee39f"
+    "url_image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&q=80"
   },
   "about": {
     "title": "Sobre Nosotros",

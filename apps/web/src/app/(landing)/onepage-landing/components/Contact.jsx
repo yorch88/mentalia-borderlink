@@ -162,22 +162,26 @@ const Contact = ({ data }) => {
                 className="form-input w-full"
               />
 
-              {/* 📞 Phone Input PRO */}
-              <div className="md:col-span-2">
-              <PhoneInput
-                country={"mx"}
-                value={form.phone}
-                onChange={(phone) =>
-                  setForm((prev) => ({ ...prev, phone }))
-                }
-                enableSearch
-                containerClass="!w-full"
-                inputClass="!w-full !h-[42px] !pl-14 !bg-white !text-gray-900 !border !border-gray-300 !rounded-md"
-                buttonClass="!h-[42px] !bg-white !border !border-gray-300 !rounded-l-md !flex !items-center !justify-center"
-                dropdownClass="!bg-white !text-black"
-              />
-            </div>
-
+              {/* 📞 Phone Input PRO */} 
+              <div className="md:col-span-2 relative">
+                <PhoneInput
+                  country="mx"
+                  value={form.phone}
+                  onChange={(phone) =>
+                    setForm((prev) => ({ ...prev, phone }))
+                  }
+                  enableSearch
+                  containerClass="!w-full"
+                  inputClass="!w-full !h-[42px] !pl-14 !bg-white !text-gray-900 !border !border-gray-300 !rounded-md"
+                  buttonClass="!h-[42px] !bg-white !border !border-gray-300 !rounded-l-md"
+                  dropdownClass="
+                    !bg-white !text-black !z-50
+                    md:!w-[300px]
+                    max-md:!w-[90vw]
+                    max-md:!left-0
+                  "
+                />
+              </div>
               <textarea
                 name="message"
                 value={form.message}
