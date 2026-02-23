@@ -92,7 +92,7 @@ const Contact = ({ data }) => {
       await sendContact({
         name: form.name,
         email: form.email,
-        phone: `+${form.phone}`, // formato internacional E.164
+        phone: `${form.phone}`, // formato internacional E.164
         message: form.message,
         pow: {
           nonce: challenge.nonce,
