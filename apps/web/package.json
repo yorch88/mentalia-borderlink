@@ -23,6 +23,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.13",
     "flatpickr": "^4.6.13",
+    "framer-motion": "^12.34.3",
     "fullcalendar": "^6.1.19",
     "lucide-react": "^0.544.0",
     "path": "^0.12.7",

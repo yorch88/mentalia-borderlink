@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+import { fadeUp } from "@/utils/animations";
 import { LuFacebook, LuLinkedin } from "react-icons/lu";
 
 export default function Footer({ data }) {
@@ -6,16 +8,19 @@ export default function Footer({ data }) {
   const socialLinks = footer?.socialLinks;
 
   return (
-    <footer className="relative pt-20 pb-12 bg-default-800 dark:bg-default-900 min-h-[200px]">
+    <motion.footer
+      variants={fadeUp}
+      initial="hidden"
+      animate="visible"
+      className="relative pt-20 pb-12 bg-default-800 dark:bg-default-900 min-h-[200px]"
+    >
       <div className="container">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
 
-          {/* Texto */}
           <div className="text-default-400 text-sm text-center md:text-left">
             {footerText}
           </div>
 
-          {/* Redes */}
           <div className="flex gap-4">
             {socialLinks?.linkedin && (
               <a
@@ -42,6 +47,6 @@ export default function Footer({ data }) {
 
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }

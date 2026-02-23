@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { fadeUp, fadeRight } from "@/utils/animations";
 import borderLogo from "@/assets/images/border-logo2.png";
+
 const Hero = ({ data }) => {
   if (!data?.hero) return null;
 
   const { title, subtitle, url_image } = data.hero;
 
   return (
-    <section className="relative lg:pt-44 lg:pb-36 md:pt-34 md:pb-20 pt-32 pb-20">
-
+    <motion.section
+      variants={fadeUp}
+      initial="hidden"
+      animate="visible"
+      className="relative lg:pt-44 lg:pb-36 md:pt-34 md:pb-20 pt-32 pb-20"
+    >
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
 
@@ -37,18 +44,25 @@ const Hero = ({ data }) => {
 
           {/* Imagen */}
           {(url_image || borderLogo) && (
-            <div className="flex justify-center items-center">
-              <img
-                src={url_image || borderLogo}
-                alt={title || "Hero image"}
-                className="w-full max-w-md object-contain drop-shadow-lg"
-              />
-            </div>
+            <motion.div
+              variants={fadeRight}
+              className="flex justify-center items-center"
+            >
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary via-blue-500 to-purple-500 rounded-2xl blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+
+                <img
+                  src={url_image || borderLogo}
+                  alt={title || "Hero image"}
+                  className="relative w-full max-w-md object-contain rounded-2xl bg-white p-4 shadow-xl"
+                />
+              </div>
+            </motion.div>
           )}
 
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

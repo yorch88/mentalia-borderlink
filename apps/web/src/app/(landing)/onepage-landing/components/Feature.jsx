@@ -1,17 +1,26 @@
+import { motion } from "framer-motion";
+import { fadeUp, staggerContainer } from "@/utils/animations";
+
 const Feature = ({ data }) => {
   if (!data?.features || !Array.isArray(data.features)) return null;
 
   return (
-    <section id="features" className="relative py-24 bg-default-900">
+    <motion.section
+      id="features"
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className="relative py-24 bg-default-900"
+    >
       <div className="container">
-
         <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
           {data.features.map((feature, index) => {
             const { title, description, url_image } = feature;
 
             return (
-              <div
+              <motion.div
                 key={index}
+                variants={fadeUp}
                 className="p-6 rounded-xl bg-default-800 border border-default-700 hover:border-primary transition-all duration-300"
               >
                 {url_image && (
@@ -33,13 +42,12 @@ const Feature = ({ data }) => {
                     {description}
                   </p>
                 )}
-              </div>
+              </motion.div>
             );
           })}
         </div>
-
       </div>
-    </section>
+    </motion.section>
   );
 };
 

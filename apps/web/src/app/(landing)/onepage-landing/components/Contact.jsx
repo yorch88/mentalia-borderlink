@@ -2,6 +2,8 @@ import { useState } from "react";
 import { sendContact } from "../api";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
+import { motion } from "framer-motion";
+import { fadeUp } from "@/utils/animations";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -121,10 +123,13 @@ const Contact = ({ data }) => {
   };
 
   return (
-    <section
-      id="contact"
-      className="relative py-20 bg-blue-700/80 dark:bg-blue-900"
-    >
+    <motion.section
+        id="contact"
+        variants={fadeUp}
+        initial="hidden"
+        animate="visible"
+        className="relative py-20 bg-blue-700/80 dark:bg-blue-900"
+      >
       <div className="container relative z-20">
         <div className="grid lg:grid-cols-2 gap-10 items-start">
           <div>
@@ -235,7 +240,7 @@ const Contact = ({ data }) => {
           </form>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

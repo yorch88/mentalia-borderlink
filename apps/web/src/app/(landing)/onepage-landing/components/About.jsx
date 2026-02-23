@@ -1,3 +1,6 @@
+import { motion } from "framer-motion";
+import { fadeLeft, fadeRight } from "@/utils/animations";
+
 const About = ({ data }) => {
   if (!data?.about) return null;
 
@@ -8,8 +11,11 @@ const About = ({ data }) => {
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
 
-          {/* Texto */}
-          <div>
+          <motion.div
+            variants={fadeLeft}
+            initial="hidden"
+            animate="visible"
+          >
             {title && (
               <h2 className="mb-6 text-4xl font-semibold text-default-800">
                 {title}
@@ -21,17 +27,20 @@ const About = ({ data }) => {
                 {description}
               </p>
             )}
-          </div>
+          </motion.div>
 
-          {/* Imagen dinámica */}
           {url_image && (
-            <div>
+            <motion.div
+              variants={fadeRight}
+              initial="hidden"
+              animate="visible"
+            >
               <img
                 src={url_image}
                 alt={title || "About image"}
                 className="rounded-xl shadow-lg"
               />
-            </div>
+            </motion.div>
           )}
 
         </div>
