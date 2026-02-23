@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { sendContact } from "../api";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -161,27 +161,34 @@ const Contact = ({ data }) => {
                 required
                 className="form-input w-full"
               />
-
-              {/* 📞 Phone Input PRO */} 
-              <div className="md:col-span-2 relative">
-                <PhoneInput
-                  country="mx"
-                  value={form.phone}
-                  onChange={(phone) =>
-                    setForm((prev) => ({ ...prev, phone }))
-                  }
-                  enableSearch
-                  containerClass="!w-full"
-                  inputClass="!w-full !h-[42px] !pl-14 !bg-white !text-gray-900 !border !border-gray-300 !rounded-md"
-                  buttonClass="!h-[42px] !bg-white !border !border-gray-300 !rounded-l-md"
-                  dropdownClass="
-                    !bg-white !text-black !z-50
-                    md:!w-[300px]
-                    max-md:!w-[90vw]
-                    max-md:!left-0
-                  "
-                />
-              </div>
+             <div className="md:col-span-2">
+                  <PhoneInput
+                    defaultCountry="mx"
+                    value={form.phone}
+                    onChange={(phone) =>
+                      setForm((prev) => ({ ...prev, phone }))
+                    }
+                    className="!w-full"
+                    inputClassName="
+                      !w-full
+                      !h-[42px]
+                      !text-sm
+                      !bg-white
+                      !border
+                      !border-gray-300
+                      !rounded-md
+                      !pl-[52px]
+                      !pr-3
+                    "
+                    countrySelectorStyleProps={{
+                      buttonClassName:
+                        "!absolute !left-0 !h-[42px] !bg-white !border-r !border-gray-300 !rounded-l-md !px-3",
+                      dropdownStyleProps: {
+                        className: "!z-50"
+                      }
+                    }}
+                  />
+                </div>
               <textarea
                 name="message"
                 value={form.message}
