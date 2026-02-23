@@ -12,30 +12,40 @@ import { getLanding } from "./api";
 const Index = () => {
   const [landing, setLanding] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
+    let loaderTimer;
+
     const fetchLanding = async () => {
+      // solo mostramos loader si tarda más de 400ms
+      loaderTimer = setTimeout(() => {
+        setShowLoader(true);
+      }, 400);
+
       try {
         const data = await getLanding();
         setLanding(data);
       } catch (err) {
         console.error("Error cargando landing:", err);
       } finally {
+        clearTimeout(loaderTimer);
         setLoading(false);
+        setShowLoader(false);
       }
     };
 
     fetchLanding();
+
+    return () => clearTimeout(loaderTimer);
   }, []);
 
   return (
     <>
       <PageMeta title="Borderlink" />
 
-      {/* Navbar siempre visible */}
       <Navbar />
 
-      {/* Contenido animado cuando carga */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: loading ? 0 : 1 }}
@@ -52,13 +62,18 @@ const Index = () => {
         )}
       </motion.div>
 
-      {/* Loader overlay elegante */}
-      {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+      {/* Loader SOLO si realmente tarda */}
+      {showLoader && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 flex items-center justify-center bg-white z-50"
+        >
           <div className="animate-pulse text-default-500">
             Cargando...
           </div>
-        </div>
+        </motion.div>
       )}
     </>
   );
