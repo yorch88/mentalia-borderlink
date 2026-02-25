@@ -8,22 +8,22 @@ const backdropVariants = {
 const modalVariants = {
   hidden: {
     opacity: 0,
-    scale: 0.9,
-    y: 40,
+    scale: 0.92,
+    y: 50,
   },
   visible: {
     opacity: 1,
     scale: 1,
     y: 0,
     transition: {
-      duration: 0.35,
+      duration: 0.4,
       ease: [0.22, 1, 0.36, 1],
     },
   },
   exit: {
     opacity: 0,
-    scale: 0.95,
-    y: 20,
+    scale: 0.96,
+    y: 30,
     transition: {
       duration: 0.25,
     },
@@ -48,31 +48,69 @@ const CookieModal = ({ open, onClose, cookies }) => {
             exit="hidden"
             onClick={onClose}
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            aria-label="Cerrar modal"
           />
 
-          {/* Modal */}
+          {/* Modal Container */}
           <div className="absolute inset-0 flex items-center justify-center p-4">
             <motion.div
               variants={modalVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl"
+              className="w-full max-w-3xl rounded-2xl bg-white text-slate-900 shadow-2xl border border-slate-200"
             >
-              <div className="flex justify-between items-center p-5 border-b">
-                <h3 className="text-lg font-semibold">
-                  {cookies?.title}
-                </h3>
+              {/* Header */}
+              <div className="flex items-start justify-between gap-4 p-6 border-b">
+                <div>
+                  <h3 className="text-xl font-semibold">
+                    {cookies?.title || "Política de Cookies"}
+                  </h3>
+                  {cookies?.updated_at && (
+                    <p className="text-xs text-slate-500 mt-1">
+                      Última actualización: {cookies.updated_at}
+                    </p>
+                  )}
+                </div>
+
                 <button
                   onClick={onClose}
-                  className="px-3 py-1 text-sm bg-gray-200 rounded"
+                  className="rounded-md px-3 py-1 text-sm bg-slate-100 hover:bg-slate-200 transition"
                 >
                   Cerrar
                 </button>
               </div>
 
-              <div className="p-5 max-h-[70vh] overflow-auto whitespace-pre-line text-sm text-gray-700">
-                {cookies?.content}
+              {/* Content */}
+              <div className="p-6 max-h-[70vh] overflow-auto">
+                {(cookies?.clauses || []).length ? (
+                  <div className="space-y-6">
+                    {cookies.clauses.map((clause, idx) => (
+                      <section key={idx} className="space-y-2">
+                        <h4 className="font-semibold text-base">
+                          {clause.title}
+                        </h4>
+                        <p className="text-sm leading-relaxed whitespace-pre-line text-slate-700">
+                          {clause.text}
+                        </p>
+                      </section>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-600">
+                    No hay política configurada aún.
+                  </p>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="p-5 border-t flex justify-end">
+                <button
+                  onClick={onClose}
+                  className="rounded-md px-4 py-2 text-sm bg-slate-900 text-white hover:opacity-90 transition"
+                >
+                  Cerrar
+                </button>
               </div>
             </motion.div>
           </div>

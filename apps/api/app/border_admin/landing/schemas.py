@@ -27,6 +27,16 @@ class FooterSection(BaseModel):
     url_image: Optional[str] = None
     socialLinks: Optional[SocialLinks] = None
 
+class LegalClause(BaseModel):
+    title: str
+    text: str
+
+
+class LegalDocument(BaseModel):
+    title: str
+    updated_at: Optional[str] = None
+    clauses: List[LegalClause] = Field(default_factory=list)
+
 class CookiePolicy(BaseModel):
     title: str
     updated_at: Optional[str] = None
@@ -49,7 +59,7 @@ class LandingContent(BaseModel):
     footer: FooterSection
     features: List[Feature] = Field(default_factory=list)
     terms: Optional[TermsAndConditions] = None
-    cookies: Optional[CookiePolicy] = None
+    cookies: Optional[LegalDocument] = None
 
 class ContactIn(BaseModel):
     name: str
