@@ -27,13 +27,18 @@ class FooterSection(BaseModel):
     url_image: Optional[str] = None
     socialLinks: Optional[SocialLinks] = None
 
+class CookiePolicy(BaseModel):
+    title: str
+    updated_at: Optional[str] = None
+    content: str
+
 class Clause(BaseModel):
     title: str
     text: str
 
 class TermsAndConditions(BaseModel):
     title: str
-    updated_at: Optional[str] = None  # ISO string, opcional
+    updated_at: Optional[str] = None
     clauses: List[Clause] = Field(default_factory=list)
 
 class LandingContent(BaseModel):
@@ -43,7 +48,8 @@ class LandingContent(BaseModel):
     privacy: Section
     footer: FooterSection
     features: List[Feature] = Field(default_factory=list)
-    terms: Optional[TermsAndConditions] = None  # <- NUEVO
+    terms: Optional[TermsAndConditions] = None
+    cookies: Optional[CookiePolicy] = None
 
 class ContactIn(BaseModel):
     name: str
@@ -52,4 +58,4 @@ class ContactIn(BaseModel):
     phone: Optional[str] = None
     message: str
     pow: PowIn
-    accepted: bool = Field(default=False)  # <- NUEVO
+    accepted: bool = Field(default=False)
