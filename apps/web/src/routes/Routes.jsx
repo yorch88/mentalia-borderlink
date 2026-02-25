@@ -443,7 +443,7 @@ export const singlePageRoutes = [{
   name: 'ModernTwoStep',
   element: <ModernTwoStep />
 }, {
-  path: '/onepage-landing',
+  path: '/contacto',
   name: 'OnePageLanding',
   element: <OnePageLanding />
 }, {

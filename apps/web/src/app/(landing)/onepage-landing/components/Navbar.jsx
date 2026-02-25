@@ -33,8 +33,8 @@ const Navbar = () => {
   };
 
   const handleScroll = (id) => {
-    if (location.pathname !== "/onepage-landing") {
-      window.location.assign("/onepage-landing");
+    if (location.pathname !== "/contacto") {
+      window.location.assign("/contacto");
       return;
     }
 
@@ -71,7 +71,7 @@ const Navbar = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <Link to="/onepage-landing" className="flex items-center">
+          <Link to="/contacto" className="flex items-center">
             <img
               src={borderLogo2}
               alt="Borderlink"

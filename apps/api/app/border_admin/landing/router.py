@@ -34,8 +34,11 @@ async def fetch_landing():
 @router.post("/contact")
 async def submit_contact(
     body: ContactIn,
-    _: None = Depends(antibot_protect)
-):
+    _: None = Depends(antibot_protect)):
+
+    if not body.accepted:
+        raise HTTPException(status_code=400, detail="Debes aceptar términos y condiciones.")
+    
     data = body.dict()
 
     # Guardar en DB

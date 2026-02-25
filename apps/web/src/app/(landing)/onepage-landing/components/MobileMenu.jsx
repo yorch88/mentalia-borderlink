@@ -33,8 +33,8 @@ const Navbar = () => {
   };
 
   const handleScroll = (id) => {
-    if (location.pathname !== "/onepage-landing") {
-      window.location.assign("/onepage-landing");
+    if (location.pathname !== "/cpntacto") {
+      window.location.assign("/contacto");
       return;
     }
 
@@ -62,7 +62,7 @@ const Navbar = () => {
       <div className="container flex items-center justify-between h-20">
 
         {/* Logo */}
-        <Link to="/onepage-landing" className="flex items-center">
+        <Link to="/contacto" className="flex items-center">
           <img
             src={borderLogo2}
             alt="Borderlink"

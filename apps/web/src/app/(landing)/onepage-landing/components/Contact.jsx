@@ -4,6 +4,7 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import { motion } from "framer-motion";
 import { fadeUp } from "@/utils/animations";
+import TermsModal from "./TermsModal";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,6 +16,8 @@ const Contact = ({ data }) => {
     message: "",
     accepted: false,
   });
+
+  const [termsOpen, setTermsOpen] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
@@ -32,28 +35,21 @@ const Contact = ({ data }) => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ---------------------------
-  // GET Challenge
-  // ---------------------------
   const getChallenge = async () => {
     const res = await fetch(`${API_URL}/v1/security/challenge`);
     if (!res.ok) throw new Error("No se pudo obtener challenge");
     return res.json();
   };
 
-  // ---------------------------
-  // SHA-256 POW Solver
-  // ---------------------------
   const solvePow = async (nonce, difficulty) => {
     let counter = 0;
     const prefix = "0".repeat(difficulty);
 
     while (true) {
-      const data = nonce + counter;
-
+      const payload = nonce + counter;
       const hashBuffer = await crypto.subtle.digest(
         "SHA-256",
-        new TextEncoder().encode(data)
+        new TextEncoder().encode(payload)
       );
 
       const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -61,24 +57,18 @@ const Contact = ({ data }) => {
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("");
 
-      if (hashHex.startsWith(prefix)) {
-        return counter;
-      }
-
+      if (hashHex.startsWith(prefix)) return counter;
       counter++;
     }
   };
 
-  // ---------------------------
-  // Submit
-  // ---------------------------
   const onSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
 
     if (!form.accepted) {
-      setError("Debes aceptar el aviso de privacidad para continuar.");
+      setError("Debes aceptar los términos y condiciones para continuar.");
       return;
     }
 
@@ -86,164 +76,166 @@ const Contact = ({ data }) => {
 
     try {
       const challenge = await getChallenge();
-      const counter = await solvePow(
-        challenge.nonce,
-        challenge.difficulty
-      );
+      const counter = await solvePow(challenge.nonce, challenge.difficulty);
 
       await sendContact({
         name: form.name,
         email: form.email,
-        phone: `${form.phone}`, // formato internacional E.164
+        phone: `${form.phone}`,
         message: form.message,
-        pow: {
-          nonce: challenge.nonce,
-          counter,
-        },
+        accepted: form.accepted, // <- NUEVO
+        pow: { nonce: challenge.nonce, counter },
       });
 
-      setSuccess(
-        "Gracias. Recibimos tu mensaje y te contactaremos pronto."
-      );
-
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-        accepted: false,
-      });
+      setSuccess("Gracias. Recibimos tu mensaje y te contactaremos pronto.");
+      setForm({ name: "", email: "", phone: "", message: "", accepted: false });
     } catch (err) {
-      setError(
-        err?.message || "Ocurrió un error al enviar tu mensaje."
-      );
+      setError(err?.message || "Ocurrió un error al enviar tu mensaje.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <motion.section
+    <>
+      <TermsModal
+        open={termsOpen}
+        onClose={() => setTermsOpen(false)}
+        terms={data?.terms}
+      />
+
+      <motion.section
         id="contact"
         variants={fadeUp}
         initial="hidden"
         animate="visible"
         className="relative py-20 bg-blue-700/80 dark:bg-blue-900"
       >
-      <div className="container relative z-20">
-        <div className="grid lg:grid-cols-2 gap-10 items-start">
-          <div>
-            <h2 className="mb-4 capitalize text-blue-50 leading-normal text-4xl font-semibold">
-              {data?.contact?.title || "Contáctanos"}
-            </h2>
+        <div className="container relative z-20">
+          <div className="grid lg:grid-cols-2 gap-10 items-start">
+            <div>
+              <h2 className="mb-4 capitalize text-blue-50 leading-normal text-4xl font-semibold">
+                {data?.contact?.title || "Contáctanos"}
+              </h2>
 
-            <p className="text-lg text-blue-200">
-              {data?.contact?.subtitle ||
-                "Cuéntanos lo que necesitas y te responderemos con los siguientes pasos."}
-            </p>
-          </div>
-
-          <form
-            onSubmit={onSubmit}
-            className="bg-card/10 backdrop-blur rounded-xl p-6 border border-white/15"
-          >
-            <div className="grid md:grid-cols-2 gap-4">
-              <input
-                name="name"
-                value={form.name}
-                onChange={onChange}
-                placeholder="Tu nombre"
-                required
-                className="form-input w-full"
-              />
-
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={onChange}
-                placeholder="tucorreo@dominio.com"
-                required
-                className="form-input w-full"
-              />
-             <div className="md:col-span-2">
-                <PhoneInput
-                  defaultCountry="mx"
-                  disableDialCodeAndPrefix
-                  placeholder="Ingresa tu número Ej. 55 1234 5678"
-                  value={form.phone}
-                  onChange={(phone) =>
-                    setForm((prev) => ({ ...prev, phone }))
-                  }
-                  className="!w-full"
-                  inputClassName="
-                    !w-full
-                    !h-[42px]
-                    !text-sm
-                    !bg-white
-                    !border
-                    !border-gray-300
-                    !rounded-md
-                    !pl-[52px]
-                    !pr-3
-                    placeholder:!text-gray-400
-                  "
-                  countrySelectorStyleProps={{
-                    buttonClassName:
-                      "!absolute !left-0 !h-[42px] !bg-white !border-r !border-gray-300 !rounded-l-md !px-3 flex items-center gap-1",
-                    dropdownStyleProps: {
-                      className: "!z-50"
-                    }
-                  }}
-                />
-              </div>
-              <textarea
-                name="message"
-                value={form.message}
-                onChange={onChange}
-                placeholder="Cuéntanos sobre tu proyecto..."
-                required
-                className="form-input w-full md:col-span-2 min-h-[120px]"
-              />
-
-              <div className="md:col-span-2 flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  name="accepted"
-                  checked={form.accepted}
-                  onChange={onChange}
-                  className="mt-1"
-                />
-                <p className="text-sm text-blue-100">
-                  {data?.privacy?.text ||
-                    "Acepto que mis datos serán utilizados únicamente para contacto y no serán compartidos con terceros."}
-                </p>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading || !form.accepted}
-                className="btn bg-card hover:text-blue-800 text-primary w-full md:col-span-2 disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {loading ? "Validando..." : "Enviar mensaje"}
-              </button>
-
-              {success && (
-                <div className="md:col-span-2 text-sm text-green-200">
-                  {success}
-                </div>
-              )}
-
-              {error && (
-                <div className="md:col-span-2 text-sm text-red-200">
-                  {error}
-                </div>
-              )}
+              <p className="text-lg text-blue-200">
+                {data?.contact?.subtitle ||
+                  "Cuéntanos lo que necesitas y te responderemos con los siguientes pasos."}
+              </p>
             </div>
-          </form>
+
+            <form
+              onSubmit={onSubmit}
+              className="bg-card/10 backdrop-blur rounded-xl p-6 border border-white/15"
+            >
+              <div className="grid md:grid-cols-2 gap-4">
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={onChange}
+                  placeholder="Tu nombre"
+                  required
+                  className="form-input w-full"
+                />
+
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={onChange}
+                  placeholder="tucorreo@dominio.com"
+                  required
+                  className="form-input w-full"
+                />
+
+                <div className="md:col-span-2">
+                  <PhoneInput
+                    defaultCountry="mx"
+                    disableDialCodeAndPrefix
+                    placeholder="Ingresa tu número Ej. 55 1234 5678"
+                    value={form.phone}
+                    onChange={(phone) =>
+                      setForm((prev) => ({ ...prev, phone }))
+                    }
+                    className="!w-full"
+                    inputClassName="
+                      !w-full
+                      !h-[42px]
+                      !text-sm
+                      !bg-white
+                      !border
+                      !border-gray-300
+                      !rounded-md
+                      !pl-[52px]
+                      !pr-3
+                      placeholder:!text-gray-400
+                    "
+                    countrySelectorStyleProps={{
+                      buttonClassName:
+                        "!absolute !left-0 !h-[42px] !bg-white !border-r !border-gray-300 !rounded-l-md !px-3 flex items-center gap-1",
+                      dropdownStyleProps: {
+                        className: "!z-50",
+                      },
+                    }}
+                  />
+                </div>
+
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={onChange}
+                  placeholder="Cuéntanos sobre tu proyecto..."
+                  required
+                  className="form-input w-full md:col-span-2 min-h-[120px]"
+                />
+
+                <div className="md:col-span-2 flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    name="accepted"
+                    checked={form.accepted}
+                    onChange={onChange}
+                    className="mt-1"
+                  />
+
+                  <p className="text-sm text-blue-100">
+                    Acepto{" "}
+                    <button
+                      type="button"
+                      onClick={() => setTermsOpen(true)}
+                      className="underline underline-offset-2 hover:opacity-90"
+                    >
+                      Términos y Condiciones
+                    </button>
+                    .
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading || !form.accepted}
+                  className="btn bg-card hover:text-blue-800 text-primary w-full md:col-span-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {loading ? "Validando..." : "Enviar mensaje"}
+                </button>
+
+                {success && (
+                  <div className="md:col-span-2 text-sm text-green-200">
+                    {success}
+                  </div>
+                )}
+
+                {error && (
+                  <div className="md:col-span-2 text-sm text-red-200">
+                    {error}
+                  </div>
+                )}
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    </motion.section>
+      </motion.section>
+    </>
   );
 };
 

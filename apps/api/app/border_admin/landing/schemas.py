@@ -27,6 +27,14 @@ class FooterSection(BaseModel):
     url_image: Optional[str] = None
     socialLinks: Optional[SocialLinks] = None
 
+class Clause(BaseModel):
+    title: str
+    text: str
+
+class TermsAndConditions(BaseModel):
+    title: str
+    updated_at: Optional[str] = None  # ISO string, opcional
+    clauses: List[Clause] = Field(default_factory=list)
 
 class LandingContent(BaseModel):
     hero: Section
@@ -35,7 +43,7 @@ class LandingContent(BaseModel):
     privacy: Section
     footer: FooterSection
     features: List[Feature] = Field(default_factory=list)
-
+    terms: Optional[TermsAndConditions] = None  # <- NUEVO
 
 class ContactIn(BaseModel):
     name: str
@@ -44,3 +52,4 @@ class ContactIn(BaseModel):
     phone: Optional[str] = None
     message: str
     pow: PowIn
+    accepted: bool = Field(default=False)  # <- NUEVO

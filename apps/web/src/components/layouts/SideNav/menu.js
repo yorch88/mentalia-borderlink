@@ -31,7 +31,7 @@ export const menuItemsData = [{
   children: [{
     key: 'One Page',
     label: 'One Page',
-    href: '/onepage-landing',
+    href: '/contacto',
     target: '_blank'
   }, {
     key: 'Product',
