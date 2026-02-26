@@ -8,7 +8,7 @@ from app.db.mongo import get_global_db
 
 security = HTTPBearer()
 
-async def get_current_tenat_user(
+async def get_current_tenant_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ):
     token = credentials.credentials
@@ -21,24 +21,28 @@ async def get_current_tenat_user(
     if claims.get("type") != "access":
         raise HTTPException(status_code=401, detail="Invalid token type")
 
-    tenant_db_name = claims.get("tenant_db")
     email = claims.get("sub")
+    tenant_db_name = claims.get("tenant_db")
 
-    if not tenant_db_name or not email:
+    if not email or not tenant_db_name:
         raise HTTPException(status_code=401, detail="Malformed token")
 
-    db = get_tenant_db(tenant_db_name)
-    user = await db["users"].find_one({"email": email})
+    # 🔥 BUSCAR EN GLOBAL DB (NO TENANT DB)
+    user = await get_global_db()["users"].find_one({
+        "email": email,
+        "status": "active"
+    })
 
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
 
     return {
+        "_id": user["_id"],
         "email": user["email"],
-        "role": user.get("role"),
-        "tenant_db": tenant_db_name,
+        "tenant_id": user["tenant_id"],     # ← ahora sí existe
+        "tenant_db": user["tenant_db"],
+        "role": user["role"]
     }
-
 
 async def get_current_global_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),

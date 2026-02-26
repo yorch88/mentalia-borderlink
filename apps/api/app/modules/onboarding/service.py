@@ -4,7 +4,7 @@ from app.shared.ids import random_client_code_5, make_db_name
 from app.security.hashing import hash_password
 from app.security.jwt import mint_token, decode_token
 from app.core.config import settings
-from app.db.mongo import get_tenant_db
+from app.db.mongo import get_tenant_db, get_global_db
 
 class OnboardingService:
     def __init__(self):
@@ -34,6 +34,7 @@ class OnboardingService:
             "giro": payload["giro"],
             "org_name": payload["org_name"],
             "modules": payload.get("modules", []),
+            "plan": payload.get("plan"),
             "status": "pending",
             "approval_jti": approval_claims["jti"],
             "created_at": int(time.time()),
@@ -44,36 +45,93 @@ class OnboardingService:
 
     async def approve(self, token: str) -> dict:
         claims = decode_token(token)
+
         if claims.get("type") != "approval":
             raise ValueError("TOKEN_INVALID")
 
-        client_code = claims["client_code"]
-        email = claims["email"]
-        jti = claims["jti"]
+        client_code = claims.get("client_code")
+        email = claims.get("email")
+        jti = claims.get("jti")
+
+        if not client_code or not email or not jti:
+            raise ValueError("TOKEN_INVALID")
 
         tenant = await self.repo.get_by_client_code(client_code)
+
         if not tenant or tenant["email"] != email:
             raise ValueError("TOKEN_INVALID")
-        if tenant.get("status") == "active":
-            # idempotente opcional
-            return {"status": "active", "tenant_db": tenant["db_name"]}
 
-        # evita reuso si quieres: verifica jti
+        # Idempotente: si ya está activo, devolver estado actual
+        if tenant.get("status") == "active":
+            return {
+                "status": "active",
+                "tenant_db": tenant["db_name"]
+            }
+
+        # Verificar que el token no haya sido reutilizado
         if tenant.get("approval_jti") != jti:
             raise ValueError("TOKEN_REUSED_OR_INVALID")
 
-        # Crear BD tenant (Mongo crea al escribir)
-        tdb = get_tenant_db(tenant["db_name"])
-        users = tdb["users"]
-        await users.create_index("email", unique=True)
+        # ---------------------------
+        # 1️⃣ Crear usuario OWNER en GLOBAL DB
+        # ---------------------------
 
-        # Crear usuario admin inicial
-        await users.insert_one({
+        from app.db.mongo import get_global_db, get_tenant_db
+
+        global_db = get_global_db()
+
+        user_doc = {
             "email": tenant["email"],
             "password_hash": tenant["password_hash"],
+            "tenant_id": tenant["_id"],
+            "tenant_db": tenant["db_name"],
+            "role": "owner",
+            "status": "active",
+            "created_at": int(time.time())
+        }
+
+        result = await global_db["users"].insert_one(user_doc)
+
+        # ---------------------------
+        # 2️⃣ Crear referencia ligera en TENANT DB
+        # ---------------------------
+
+        tdb = get_tenant_db(tenant["db_name"])
+
+        await tdb["users"].insert_one({
+            "_id": result.inserted_id,
             "role": "owner",
             "created_at": int(time.time())
         })
 
+        # ---------------------------
+        # 3️⃣ (Opcional recomendado) Crear clínica default
+        # ---------------------------
+
+        await tdb["clinics"].insert_one({
+            "name": "Clínica Principal",
+            "is_default": True,
+            "created_at": int(time.time())
+        })
+
+        # ---------------------------
+        # 4️⃣ Marcar tenant como activo
+        # ---------------------------
+
         await self.repo.set_active(client_code)
-        return {"status": "active", "tenant_db": tenant["db_name"]}
+
+        return {
+            "status": "active",
+            "tenant_db": tenant["db_name"]
+        }
+
+        result = await global_db["users"].insert_one(user_doc)
+
+        # 2️⃣ Crear referencia ligera en TENANT DB
+        tdb = get_tenant_db(tenant["db_name"])
+
+        await tdb["users"].insert_one({
+            "_id": result.inserted_id,   # ← mismo ID que global
+            "role": "owner",
+            "created_at": int(time.time())
+        })

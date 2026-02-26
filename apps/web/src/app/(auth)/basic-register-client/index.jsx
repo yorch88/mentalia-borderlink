@@ -4,7 +4,7 @@ import PageMeta from '@/components/PageMeta';
 import { registerTenant } from './api';
 
 const API_URL = import.meta.env.VITE_API_URL;
-
+const PLANES = ['basico', 'standar', 'premium'];
 /* =========================
    PoW Solver
 ========================= */
@@ -51,7 +51,8 @@ const Index = () => {
     password: '',
     giro: '',
     org_name: '',
-    modules: ['MetalIA MS'],
+    modules: ['MentalIA MS'],
+    plan: '', 
   });
 
   const [loading, setLoading] = useState(false);
@@ -207,8 +208,26 @@ const Index = () => {
                     </option>
                   ))}
                 </select>
-              </div>
 
+              </div>
+              <div className="mb-6">
+                <label className="block text-sm mb-2">
+                  Plan
+                </label>
+              <select
+            name="plan"
+            value={form.plan}
+            onChange={handleChange}
+            className="form-input"
+          >
+            <option value="">Selecciona un plan (opcional)</option>
+            {PLANES.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+          </select>
+          </div>
               <button
                 type="submit"
                 disabled={loading}

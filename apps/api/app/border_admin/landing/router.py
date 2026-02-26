@@ -5,7 +5,7 @@ from .service import (
     update_landing,
     save_contact
 )
-from app.security.dependencies import get_current_tenat_user
+from app.security.dependencies import get_current_tenant_user
 from app.security.antibot.dependency import antibot_protect
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
@@ -26,7 +26,7 @@ async def fetch_landing():
 # @router.put("/")
 # async def modify_landing(
 #     body: LandingContent,
-#     current_user=Depends(get_current_tenat_user)
+#     current_user=Depends(get_current_tenant_user)
 # ):
 #     return await update_landing(body.dict())
 

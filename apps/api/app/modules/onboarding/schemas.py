@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import List
+from typing import List, Literal, Optional
 from typing_extensions import Annotated
 
 
@@ -29,4 +29,5 @@ class RegisterIn(BaseModel):
     giro: str = Field(min_length=2)
     org_name: str = Field(min_length=2)
     modules: List[str] = Field(default_factory=list)
+    plan: Optional[Literal["basico", "standar", "premium"]] = None
     pow: PowPayload
