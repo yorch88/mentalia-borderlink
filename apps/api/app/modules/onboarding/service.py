@@ -1,5 +1,7 @@
 import time
-from app.modules.onboarding.repo import TenantsRepo
+from datetime import datetime, timezone
+from app.modules.onboarding.repo import TenantsRepo, TermsRepo
+from app.modules.onboarding.schemas import Terms
 from app.shared.ids import random_client_code_5, make_db_name
 from app.security.hashing import hash_password
 from app.security.jwt import mint_token, decode_token
@@ -33,11 +35,19 @@ class OnboardingService:
             "password_hash": hash_password(payload["password"]),
             "giro": payload["giro"],
             "org_name": payload["org_name"],
+            "phone": payload.get("phone"),
             "modules": payload.get("modules", []),
             "plan": payload.get("plan"),
             "status": "pending",
             "approval_jti": approval_claims["jti"],
             "created_at": int(time.time()),
+            "terms_acceptance": {
+                "accepted": True,
+                "version": payload["terms_version"],
+                "accepted_at": int(time.time()),
+                "document_type": "privacy"
+            }
+
         }
         await self.repo.insert_tenant(doc)
 
@@ -135,3 +145,36 @@ class OnboardingService:
             "role": "owner",
             "created_at": int(time.time())
         })
+#implementar aqui clase TermsService
+class TermsService:
+    def __init__(self):
+        self.repo = TermsRepo()
+
+    async def create_terms(self, payload: Terms) -> dict:
+        # Verificar si ya existe esa versión
+        existing = await self.repo.get_by_version(payload.version)
+        if existing:
+            raise ValueError("VERSION_ALREADY_EXISTS")
+
+        # Desactivar términos anteriores
+        await self.repo.deactivate_all()
+
+        doc = payload.model_dump()
+        doc["updated_at"] = datetime.now(timezone.utc)
+        doc["is_active"] = True
+
+        await self.repo.create(doc)
+
+        return {
+            "message": "Terms created successfully",
+            "version": payload.version,
+            "is_active": True
+        }
+
+    async def get_active_terms(self) -> dict:
+        terms = await self.repo.get_active()
+        if not terms:
+            raise ValueError("NO_ACTIVE_TERMS")
+
+        terms["_id"] = str(terms["_id"])
+        return terms

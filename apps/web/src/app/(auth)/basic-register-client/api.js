@@ -26,3 +26,27 @@ export async function registerTenant(payload) {
 
   return data;
 }
+
+/* =========================
+   GET TERMS
+========================= */
+
+export async function getTerms() {
+  const response = await fetch(
+    `${API_URL}/v1/onboarding/terms`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.detail || "Error obteniendo términos");
+  }
+
+  return data;
+}

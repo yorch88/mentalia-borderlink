@@ -15,7 +15,6 @@ async def create_user(current_user, payload):
     if payload.role not in CREATABLE_ROLES:
         raise HTTPException(status_code=400, detail="Rol inválido")
 
-    # Validar clínicas
     for clinic_id in payload.clinic_ids:
         exists = await repo.clinic_exists(
             current_user["tenant_db"],
@@ -55,11 +54,9 @@ async def create_user(current_user, payload):
         "created_at": int(time.time())
     }
 
-    # 1️⃣ Insert global
     user_id = await repo.insert_global(global_user)
 
     try:
-        # 2️⃣ Insert tenant user
         await repo.insert_tenant_user(
             current_user["tenant_db"],
             {
@@ -68,8 +65,6 @@ async def create_user(current_user, payload):
                 "created_at": int(time.time())
             }
         )
-
-        # 3️⃣ Insert relations
         for clinic_id in payload.clinic_ids:
             await repo.insert_user_clinic(
                 current_user["tenant_db"],
@@ -78,7 +73,6 @@ async def create_user(current_user, payload):
             )
 
     except Exception:
-        # rollback global insert si falla algo
         await repo.update_global(user_id, {"status": "error"})
         raise
 
@@ -100,11 +94,10 @@ async def list_users(current_user):
 
     for tu in tenant_users:
 
-        # Buscar identidad en GLOBAL
         global_user = await repo.find_global_by_id(str(tu["_id"]))
 
         if not global_user:
-            continue  # seguridad por si hay inconsistencia
+            continue
 
         clinics = await repo.get_user_clinics(
             current_user["tenant_db"],

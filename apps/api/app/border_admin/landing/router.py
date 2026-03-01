@@ -23,14 +23,6 @@ async def fetch_landing():
     return await get_landing()
 
 
-# @router.put("/")
-# async def modify_landing(
-#     body: LandingContent,
-#     current_user=Depends(get_current_tenant_user)
-# ):
-#     return await update_landing(body.dict())
-
-#solo seguridad antibot
 @router.post("/contact")
 async def submit_contact(
     body: ContactIn,
@@ -64,20 +56,10 @@ async def submit_contact(
 
     return {"status": "received"}
 
-# @router.get("/")
-# async def fetch_landing():
-#     return await get_landing()
 
-#aqui super importante proteger este api con permisos de super admin tenant
 @router.put("/")
 async def modify_landing(
     body: LandingContent
 ):
     return await update_landing(body.dict())
 
-
-# @router.post("/contact")
-# async def submit_contact(
-#     body: ContactIn
-# ):
-#     return await save_contact(body.dict())
