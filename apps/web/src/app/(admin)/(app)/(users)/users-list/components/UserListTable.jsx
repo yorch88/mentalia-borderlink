@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getUsers, createUser, getBranches } from "../../api";
 import { LuPlus, LuSearch } from "react-icons/lu";
+import Alert from "@/components/Alert";
 
 const UserListTable = () => {
 
@@ -17,6 +18,20 @@ const UserListTable = () => {
 
   const [selectedBranch, setSelectedBranch] = useState("");
 
+  /* ========================
+     ALERT STATE
+  ======================== */
+
+  const [alert, setAlert] = useState(null);
+
+  function showAlert(type, message) {
+    setAlert({ type, message });
+
+    setTimeout(() => {
+      setAlert(null);
+    }, 4000);
+  }
+
   useEffect(() => {
     loadUsers();
     loadBranches();
@@ -28,6 +43,7 @@ const UserListTable = () => {
       setUsers(data);
     } catch (err) {
       console.error(err);
+      showAlert("error", "Error cargando usuarios");
     }
   }
 
@@ -37,6 +53,7 @@ const UserListTable = () => {
       setBranches(data);
     } catch (err) {
       console.error(err);
+      showAlert("error", "Error cargando sucursales");
     }
   }
 
@@ -49,7 +66,7 @@ const UserListTable = () => {
     if (!selectedBranch) return;
 
     if (form.branches_ids.includes(selectedBranch)) {
-      alert("Sucursal ya agregada");
+      showAlert("warning", "Sucursal ya agregada");
       return;
     }
 
@@ -86,7 +103,7 @@ const UserListTable = () => {
         branches_ids: form.branches_ids
       });
 
-      alert("Usuario creado");
+      showAlert("success", "Usuario creado correctamente");
 
       setShowModal(false);
 
@@ -99,7 +116,7 @@ const UserListTable = () => {
       loadUsers();
 
     } catch (err) {
-      alert(err.message);
+      showAlert("error", err.message || "Error creando usuario");
     }
   }
 
@@ -114,6 +131,14 @@ const UserListTable = () => {
 
   return (
     <div className="card">
+
+      {/* ALERT */}
+
+      {alert && (
+        <div className="mb-4">
+          <Alert type={alert.type} message={alert.message} />
+        </div>
+      )}
 
       {/* HEADER */}
 
@@ -229,8 +254,6 @@ const UserListTable = () => {
 
             <form onSubmit={handleSubmit}>
 
-              {/* EMAIL */}
-
               <input
                 className="form-input w-full mb-3"
                 placeholder="Email"
@@ -241,29 +264,17 @@ const UserListTable = () => {
                 required
               />
 
-              {/* ROLE */}
-
               <select
-              className="form-input w-full mb-3"
-              value={form.role}
-              onChange={(e) =>
-                setForm({ ...form, role: e.target.value })
-              }
-            >
-
-              <option value="admin">Admin</option>
-
-              <option value="therapist">
-                Therapist
-              </option>
-
-              <option value="receptionist">
-                Receptionist
-              </option>
-
-            </select>
-
-              {/* SELECT BRANCH */}
+                className="form-input w-full mb-3"
+                value={form.role}
+                onChange={(e) =>
+                  setForm({ ...form, role: e.target.value })
+                }
+              >
+                <option value="admin">Admin</option>
+                <option value="therapist">Therapist</option>
+                <option value="receptionist">Receptionist</option>
+              </select>
 
               <div className="flex gap-2 mb-3">
 
@@ -297,8 +308,6 @@ const UserListTable = () => {
 
               </div>
 
-              {/* SELECTED BRANCHES */}
-
               <div className="mb-4">
 
                 {form.branches_ids.map(id => (
@@ -314,8 +323,6 @@ const UserListTable = () => {
                 ))}
 
               </div>
-
-              {/* BUTTONS */}
 
               <div className="flex gap-2">
 

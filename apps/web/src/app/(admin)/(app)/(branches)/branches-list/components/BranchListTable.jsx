@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getBranches, createBranch } from "../../api";
 import { LuPlus, LuSearch } from "react-icons/lu";
-
+import Alert from "@/components/Alert";
 const BranchListTable = () => {
 
   const [branches, setBranches] = useState([]);
@@ -18,18 +18,40 @@ const BranchListTable = () => {
     country: "MX"
   });
 
+  /* ========================
+     ALERT STATE
+  ======================== */
+
+  const [alert, setAlert] = useState(null);
+
+  function showAlert(type, message) {
+
+    setAlert({ type, message });
+
+    setTimeout(() => {
+      setAlert(null);
+    }, 4000);
+
+  }
+
   useEffect(() => {
     loadBranches();
   }, []);
 
   async function loadBranches() {
+
     try {
+
       const data = await getBranches();
       setBranches(data);
+
     } catch (err) {
+
       console.error(err);
-      alert("Error cargando sucursales");
+      showAlert("error", "Error cargando sucursales");
+
     }
+
   }
 
   async function handleSubmit(e) {
@@ -53,7 +75,7 @@ const BranchListTable = () => {
 
       await createBranch(payload);
 
-      alert("Sucursal creada");
+      showAlert("success", "Sucursal creada correctamente");
 
       setShowModal(false);
 
@@ -71,7 +93,9 @@ const BranchListTable = () => {
       loadBranches();
 
     } catch (err) {
-      alert(err.message);
+
+      showAlert("error", err.message || "Error creando sucursal");
+
     }
 
   }
@@ -99,6 +123,14 @@ const BranchListTable = () => {
   return (
 
     <div className="card">
+
+      {/* ALERT */}
+
+      {alert && (
+        <div className="mb-4">
+          <Alert type={alert.type} message={alert.message} />
+        </div>
+      )}
 
       {/* HEADER */}
 
