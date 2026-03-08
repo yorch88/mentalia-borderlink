@@ -1,4 +1,4 @@
-import { LuCalendar1, LuCircuitBoard, LuClipboardList, LuCodesandbox, LuFileText, LuFingerprint, LuLayoutPanelLeft, LuLock, LuMail, LuMessagesSquare, LuMonitorDot, LuPackage, LuPictureInPicture2, LuShare2, LuShieldCheck, LuShoppingBag, LuSquareUserRound } from 'react-icons/lu';
+import {LuCalendar1, LuCircuitBoard, LuClipboardList, LuCodesandbox, LuFileText, LuFingerprint, LuHouse, LuLayoutPanelLeft, LuLock, LuMail, LuMessagesSquare, LuMonitorDot, LuPackage, LuPictureInPicture2, LuShare2, LuShieldCheck, LuShoppingBag, LuSquareUserRound } from 'react-icons/lu';
 export const menuItemsData = [{
   key: 'Overview',
   label: 'Overview',
@@ -219,7 +219,22 @@ export const menuItemsData = [{
     label: 'Grid View',
     href: '/users-grid'
   }]
-}, {
+}, 
+{
+  key: 'Branches',
+  label: 'Branches',
+  icon: LuHouse,
+  children: [{
+    key: 'Branch List',
+    label: 'Branch List',
+    href: '/branches-list'
+  }, {
+    key: 'Branch View',
+    label: 'Branch View',
+    href: '/branch-grid'
+  }]
+},
+{
   key: 'Extra',
   label: 'Extra',
   isTitle: true

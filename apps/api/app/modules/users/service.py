@@ -15,15 +15,15 @@ async def create_user(current_user, payload):
     if payload.role not in CREATABLE_ROLES:
         raise HTTPException(status_code=400, detail="Rol inválido")
 
-    for clinic_id in payload.clinic_ids:
-        exists = await repo.clinic_exists(
+    for branch_id in payload.branches_ids:
+        exists = await repo.branch_exists(
             current_user["tenant_db"],
-            clinic_id
+            branch_id
         )
         if not exists:
             raise HTTPException(
                 status_code=400,
-                detail=f"Clínica inválida: {clinic_id}"
+                detail=f"Sucursal/Clínica inválida: {branch_id}"
             )
 
     existing = await repo.find_global_by_email(payload.email)
@@ -65,11 +65,11 @@ async def create_user(current_user, payload):
                 "created_at": int(time.time())
             }
         )
-        for clinic_id in payload.clinic_ids:
-            await repo.insert_user_clinic(
+        for branch_id in payload.branches_ids:
+            await repo.insert_user_branch(
                 current_user["tenant_db"],
                 user_id,
-                clinic_id
+                branch_id
             )
 
     except Exception:
@@ -99,7 +99,7 @@ async def list_users(current_user):
         if not global_user:
             continue
 
-        clinics = await repo.get_user_clinics(
+        branches = await repo.get_user_branches(
             current_user["tenant_db"],
             tu["_id"]
         )
@@ -108,7 +108,7 @@ async def list_users(current_user):
             "id": str(tu["_id"]),
             "email": global_user["email"],
             "role": tu["role"],
-            "clinic_ids": [str(c["clinic_id"]) for c in clinics]
+            "branch_ids": [str(c["branch_id"]) for c in branches]
         })
 
     return result

@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import PageBreadcrumb from '@/components/PageBreadcrumb';
-import UserListTable from './components/UserListTable';
-import PageMeta from '@/components/PageMeta';
+import PageBreadcrumb from "@/components/PageBreadcrumb";
+import PageMeta from "@/components/PageMeta";
+import BranchListTable from "./components/BranchListTable";
 
 const Index = () => {
 
@@ -20,21 +20,26 @@ const Index = () => {
   }, [navigate]);
 
   return (
+
     <>
-      <PageMeta title="Users" />
+
+      <PageMeta title="Branches" />
 
       <main>
 
         <PageBreadcrumb
-          subtitle="Users"
+          subtitle="Branches"
           title="List view"
         />
 
-        <UserListTable />
+        <BranchListTable />
 
       </main>
+
     </>
+
   );
+
 };
 
 export default Index;

@@ -5,14 +5,14 @@ from typing import List, Literal
 class CreateUserIn(BaseModel):
     email: EmailStr
     role: Literal["admin", "profesionista", "recepcionista", "emisor"]
-    clinic_ids: List[str]
+    branches_ids: List[str]
 
-    @validator("clinic_ids")
-    def validate_clinics(cls, v):
+    @validator("branches_ids")
+    def validate_branches(cls, v):
         if not v:
-            raise ValueError("Debe asignar al menos una clínica")
+            raise ValueError("Debe asignar al menos una Sucurasl/clínica")
         if len(set(v)) != len(v):
-            raise ValueError("Clínicas duplicadas")
+            raise ValueError("Sucursal/Clínica duplicada")
         return v
 
 
@@ -21,5 +21,5 @@ class ActivateUserIn(BaseModel):
     password: str = Field(min_length=8)
 
 
-class AssignClinicsIn(BaseModel):
-    clinic_ids: List[str]
+class AssignBranchesIn(BaseModel):
+    branches_ids: List[str]

@@ -13,7 +13,7 @@ from app.modules.auth.router import router as auth_router
 from app.border_admin.landing.router import router as land_router
 from app.border_admin.global_auth.router import router as global_router
 from app.security.antibot.router import router as antibot_router
-from app.modules.clinics.router import router as clinics_router
+from app.modules.branches.router import router as branches_router
 from app.modules.users.router import router as users_router
 
 # =====================================================
@@ -69,7 +69,7 @@ app.include_router(land_router)
 app.include_router(antibot_router)
 app.include_router(borderadmin_router)
 app.include_router(global_router)
-app.include_router(clinics_router)
+app.include_router(branches_router)
 app.include_router(users_router)
 
 # =====================================================

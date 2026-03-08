@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { fadeLeft, fadeRight } from "@/utils/animations";
+import borderLogo2 from "@/assets/images/border-logo2.png";
 
 const About = ({ data }) => {
   if (!data?.about) return null;
@@ -29,7 +30,7 @@ const About = ({ data }) => {
             )}
           </motion.div>
 
-          {url_image && (
+          {/* {url_image && (
             <motion.div
               variants={fadeRight}
               initial="hidden"
@@ -41,7 +42,18 @@ const About = ({ data }) => {
                 className="rounded-xl shadow-lg"
               />
             </motion.div>
-          )}
+          )} */}
+          <motion.div
+              variants={fadeRight}
+              initial="hidden"
+              animate="visible"
+            >
+              <img
+                src={borderLogo2}
+                alt={title || "About image"}
+                // className="rounded-xl shadow-lg"
+              />
+            </motion.div>
 
         </div>
       </div>

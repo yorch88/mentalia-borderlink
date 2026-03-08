@@ -40,6 +40,7 @@ const InvoiceOverview = lazy(() => import('@/app/(admin)/(app)/(invoice)/overvie
 
 const UserGrid = lazy(() => import('@/app/(admin)/(app)/(users)/users-grid'));
 const UserList = lazy(() => import('@/app/(admin)/(app)/(users)/users-list'));
+const BranchList = lazy(() => import('@/app/(admin)/(app)/(branches)/branches-list'));
 const Calender = lazy(() => import('@/app/(admin)/(app)/calendar'));
 const Chat = lazy(() => import('@/app/(admin)/(app)/chat'));
 const MailBox = lazy(() => import('@/app/(admin)/(app)/mailbox'));
@@ -50,6 +51,7 @@ const Analytics = lazy(() => import('@/app/(admin)/(dashboards)/analytics'));
 const Email = lazy(() => import('@/app/(admin)/(dashboards)/email'));
 const Hr = lazy(() => import('@/app/(admin)/(dashboards)/hr'));
 const Ecommerce = lazy(() => import('@/app/(admin)/(dashboards)/index'));
+
 
 // layouts
 const DarkMode = lazy(() => import('@/app/(admin)/(layouts)/dark-mode'));
@@ -237,7 +239,13 @@ export const layoutsRoutes = [{
   path: '/users-list',
   name: 'UserList',
   element: <UserList />
-}, {
+}, 
+, {
+  path: '/branches-list',
+  name: 'BranchList',
+  element: <BranchList />
+},
+{
   path: '/calendar',
   name: 'Calender',
   element: <Calender />

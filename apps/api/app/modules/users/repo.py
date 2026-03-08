@@ -41,37 +41,37 @@ class UsersRepo:
     async def insert_tenant_user(self, tenant_db: str, doc: dict):
         await get_tenant_db(tenant_db)["users"].insert_one(doc)
 
-    async def clinic_exists(self, tenant_db: str, clinic_id: str):
+    async def branch_exists(self, tenant_db: str, branch_id: str):
         try:
-            return await get_tenant_db(tenant_db)["clinics"].find_one({
-                "_id": ObjectId(clinic_id)
+            return await get_tenant_db(tenant_db)["branches"].find_one({
+                "_id": ObjectId(branch_id)
             })
         except InvalidId:
             return None
 
-    async def insert_user_clinic(self, tenant_db: str, user_id, clinic_id):
-        await get_tenant_db(tenant_db)["user_clinics"].update_one(
+    async def insert_user_branch(self, tenant_db: str, user_id, branch_id):
+        await get_tenant_db(tenant_db)["user_branches"].update_one(
             {
                 "user_id": user_id,
-                "clinic_id": ObjectId(clinic_id)
+                "branch_id": ObjectId(branch_id)
             },
             {
                 "$setOnInsert": {
                     "user_id": user_id,
-                    "clinic_id": ObjectId(clinic_id),
+                    "branch_id": ObjectId(branch_id),
                     "created_at": int(time.time())
                 }
             },
             upsert=True
         )
 
-    async def delete_user_clinics(self, tenant_db: str, user_id):
-        await get_tenant_db(tenant_db)["user_clinics"].delete_many({
+    async def delete_user_branches(self, tenant_db: str, user_id):
+        await get_tenant_db(tenant_db)["user_branches"].delete_many({
             "user_id": user_id
         })
 
-    async def get_user_clinics(self, tenant_db: str, user_id):
-        cursor = get_tenant_db(tenant_db)["user_clinics"].find({
+    async def get_user_branches(self, tenant_db: str, user_id):
+        cursor = get_tenant_db(tenant_db)["user_branches"].find({
             "user_id": user_id
         })
         return [doc async for doc in cursor]

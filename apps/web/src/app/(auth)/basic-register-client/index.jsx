@@ -66,6 +66,7 @@ const Index = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   /* =========================
      Load Active Terms
@@ -241,14 +242,27 @@ const Index = () => {
               {/* Password */}
               <div className="mb-4">
                 <label className="block text-sm mb-2">Contraseña</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  className="form-input"
-                  required
-                />
+
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    className="form-input pr-10"
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    onMouseDown={() => setShowPassword(true)}
+                    onMouseUp={() => setShowPassword(false)}
+                    onMouseLeave={() => setShowPassword(false)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xl"
+                  >
+                    👁
+                  </button>
+                </div>
               </div>
 
               {/* Teléfono */}

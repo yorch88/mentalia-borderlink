@@ -118,8 +118,8 @@ class OnboardingService:
         # 3️⃣ (Opcional recomendado) Crear clínica default
         # ---------------------------
 
-        await tdb["clinics"].insert_one({
-            "name": "Clínica Principal",
+        await tdb["branches"].insert_one({
+            "name": "Sucursal Principal",
             "is_default": True,
             "created_at": int(time.time())
         })
