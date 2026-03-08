@@ -4,7 +4,7 @@ from typing import List, Literal
 
 class CreateUserIn(BaseModel):
     email: EmailStr
-    role: Literal["admin", "profesionista", "recepcionista", "emisor"]
+    role: Literal["admin", "receptionist", "therapist"]
     branches_ids: List[str]
 
     @validator("branches_ids")

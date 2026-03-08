@@ -244,19 +244,24 @@ const UserListTable = () => {
               {/* ROLE */}
 
               <select
-                className="form-input w-full mb-3"
-                value={form.role}
-                onChange={(e) =>
-                  setForm({ ...form, role: e.target.value })
-                }
-              >
+              className="form-input w-full mb-3"
+              value={form.role}
+              onChange={(e) =>
+                setForm({ ...form, role: e.target.value })
+              }
+            >
 
-                <option value="admin">Admin</option>
-                <option value="profesionista">Profesional</option>
-                <option value="recepcionista">Recepcionista</option>
-                <option value="emisor">Emisor</option>
+              <option value="admin">Admin</option>
 
-              </select>
+              <option value="therapist">
+                Therapist
+              </option>
+
+              <option value="receptionist">
+                Receptionist
+              </option>
+
+            </select>
 
               {/* SELECT BRANCH */}
 
