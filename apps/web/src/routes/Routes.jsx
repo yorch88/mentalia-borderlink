@@ -70,6 +70,10 @@ const Faq = lazy(() => import('@/app/(admin)/(pages)/faqs'));
 const Pricing = lazy(() => import('@/app/(admin)/(pages)/pricing'));
 const Starter = lazy(() => import('@/app/(admin)/(pages)/starter'));
 const Timeline = lazy(() => import('@/app/(admin)/(pages)/timeline'));
+const PinPage = lazy(() => import('@/app/(auth)/basic-reset-password/PinPage'));
+const ResetPasswordClient = lazy(() =>
+  import('@/app/(auth)/basic-reset-password/ResetPasswordClient')
+);
 
 //auth
 const BasicApproveClient = lazy(() => import('@/app/(auth)/basic-approve-client'));
@@ -349,7 +353,16 @@ export const singlePageRoutes = [{
   name: 'BasicRegisterClient',
   element: <BasicRegisterClient />
 }, 
-
+{
+  path: '/pinpage',
+  name: 'PinPage',
+  element: <PinPage />
+},
+{
+  path: '/reset-password-client',
+  name: 'ResetPasswordClient',
+  element: <ResetPasswordClient />
+},
 {
   path: '/basic-create-password',
   name: 'BasicCreatePassword',
